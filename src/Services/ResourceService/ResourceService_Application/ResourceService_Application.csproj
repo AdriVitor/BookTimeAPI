@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.3.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\MessageBugLib\Communication.MessageBus.csproj" />
+    <ProjectReference Include="..\..\..\Libs\MessageBus\Communication.MessageBus.csproj" />
+    <ProjectReference Include="..\ResourceService_Domain\ResourceService_Domain.csproj" />
+    <ProjectReference Include="..\ResourceService_Infraestructure\ResourceService_Infraestructure.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,62 @@
+services:
+  booktime_booking-db:
+    image: postgres:16
+    container_name: booktime_booking-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: booktime123
+      POSTGRES_DB: booking_service
+    ports:
+     - "5433:5432"
+    volumes:
+     - pgdata_bookingservice:/var/lib/postgresql/data
+    networks:
+      - microservices
+
+  booktime_user-db:
+    image: postgres:16
+    container_name: booktime_user-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: booktime123
+      POSTGRES_DB: user_service
+    ports:
+     - "5434:5432"
+    volumes:
+     - pgdata_userservice:/var/lib/postgresql/data
+    networks:
+      - microservices
+
+  booktime_resource-db:
+    image: postgres:16
+    container_name: booktime_resource-db
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: booktime123
+      POSTGRES_DB: resource_service
+    ports:
+     - "5435:5432"
+    volumes:
+     - pgdata_resourceservice:/var/lib/postgresql/data
+    networks:
+      - microservices
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: rabbitmq-host
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+volumes:
+  pgdata_bookingservice:
+  pgdata_userservice:
+  pgdata_resourceservice:
+
+networks:
+  microservices:
+    driver: bridge
