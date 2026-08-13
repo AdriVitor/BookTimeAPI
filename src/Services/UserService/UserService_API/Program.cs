@@ -43,7 +43,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRolesRepository, RolesRepository>();
 builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 
-builder.Services.AddConfigurationMessageBroker();
+builder.Services.AddConfigurationMessageBroker(builder.Configuration);
 builder.Services.AddMassTransitHostedService();
 
 builder.Services.ConfigureJwt(builder.Configuration);

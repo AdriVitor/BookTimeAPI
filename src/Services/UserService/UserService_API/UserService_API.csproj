@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libs\Communication.Email\Communication.Email.csproj" />
-    <ProjectReference Include="..\..\..\libs\MessageBugLib\Communication.MessageBus.csproj" />
     <ProjectReference Include="..\..\..\Libs\MessageBus\Communication.MessageBus.csproj" />
     <ProjectReference Include="..\UserService_Application\UserService_Application.csproj" />
   </ItemGroup>

@@ -3,14 +3,15 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
-EXPOSE 8080
+EXPOSE 8082
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/BookingService/BookingService_API/BookingService_API.csproj", "src/Services/BookingService/BookingService_API/"]
-COPY ["src/libs/MessageBugLib/Communication.MessageBus.csproj", "src/libs/MessageBugLib/"]
-COPY ["src/libs/Shared/Shared.csproj", "src/libs/Shared/"]
+COPY ["src/Libs/Http/Communication.Http.csproj", "src/Libs/Http/"]
+COPY ["src/Libs/MessageBus/Communication.MessageBus.csproj", "src/Libs/MessageBus/"]
+COPY ["src/Libs/Shared/Shared.csproj", "src/Libs/Shared/"]
 COPY ["src/Services/BookingService/BookingService_Application/BookingService_Application.csproj", "src/Services/BookingService/BookingService_Application/"]
 COPY ["src/Services/BookingService/BookingService_Domain/BookingService_Domain.csproj", "src/Services/BookingService/BookingService_Domain/"]
 COPY ["src/Services/BookingService/BookingService_Infra/BookingService_Infraestructure.csproj", "src/Services/BookingService/BookingService_Infra/"]

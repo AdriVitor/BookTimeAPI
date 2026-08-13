@@ -38,7 +38,7 @@ builder.Services.AddVersionedApiExplorer(o =>
     o.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddConfigurationMessageBroker();
+builder.Services.AddConfigurationMessageBroker(builder.Configuration);
 builder.Services.AddMassTransitHostedService();
 
 builder.Services.ConfigureJwt(builder.Configuration);

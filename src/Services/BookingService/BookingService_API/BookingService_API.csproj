@@ -24,9 +24,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libs\Http\Communication.Http.csproj" />
-    <ProjectReference Include="..\..\..\libs\MessageBugLib\Communication.MessageBus.csproj" />
     <ProjectReference Include="..\..\..\Libs\MessageBus\Communication.MessageBus.csproj" />
-    <ProjectReference Include="..\..\..\libs\Shared\Shared.csproj" />
+    <ProjectReference Include="..\..\..\Libs\Shared\Shared.csproj" />
     <ProjectReference Include="..\BookingService_Application\BookingService_Application.csproj" />
   </ItemGroup>
 

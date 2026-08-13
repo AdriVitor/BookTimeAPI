@@ -32,7 +32,7 @@ builder.Services.AddVersionedApiExplorer(o =>
     o.SubstituteApiVersionInUrl = true;
 });
 
-builder.Services.AddConfigurationMessaging();
+builder.Services.AddConfigurationMessaging(builder.Configuration);
 builder.Services.AddMassTransitHostedService();
 
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();

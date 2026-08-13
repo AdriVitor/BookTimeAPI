@@ -10,6 +10,12 @@ services:
      - "5433:5432"
     volumes:
      - pgdata_bookingservice:/var/lib/postgresql/data
+     - ./src/Services/BookingService/BookingService_Infra/Db/CreateTable.sql:/docker-entrypoint-initdb.d/01-create-table.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d booking_service"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - microservices
 
@@ -24,6 +30,12 @@ services:
      - "5434:5432"
     volumes:
      - pgdata_userservice:/var/lib/postgresql/data
+     - ./src/Services/UserService/UserService_Infraestructure/Db/CreateTable.sql:/docker-entrypoint-initdb.d/01-create-table.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d user_service"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - microservices
 
@@ -38,6 +50,12 @@ services:
      - "5435:5432"
     volumes:
      - pgdata_resourceservice:/var/lib/postgresql/data
+     - ./src/Services/ResourceService/ResourceService_Infraestructure/Db/CreateTable.sql:/docker-entrypoint-initdb.d/01-create-table.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d resource_service"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
     networks:
       - microservices
 
@@ -51,6 +69,117 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    networks:
+      - microservices
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: src/Services/AuthService/AuthService_API/Dockerfile
+    container_name: auth-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      InternalServices__UrlBaseUserService: http://user-service:8080/api/
+    ports:
+      - "5211:8080"
+    depends_on:
+      - user-service
+    networks:
+      - microservices
+
+  user-service:
+    build:
+      context: .
+      dockerfile: src/Services/UserService/UserService_API/Dockerfile
+    container_name: user-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DefaultConnection: "Server=booktime_user-db;Port=5432;Database=user_service;Username=admin;Password=booktime123;SSLMode=Disable;"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__User: guest
+      RabbitMq__Pass: guest
+    ports:
+      - "5223:8080"
+    depends_on:
+      booktime_user-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices
+
+  resource-service:
+    build:
+      context: .
+      dockerfile: src/Services/ResourceService/ResourceService_API/Dockerfile
+    container_name: resource-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DefaultConnection: "Server=booktime_resource-db;Port=5432;Database=resource_service;Username=admin;Password=booktime123;SSLMode=Disable;"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__User: guest
+      RabbitMq__Pass: guest
+    ports:
+      - "5111:8080"
+    depends_on:
+      booktime_resource-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - microservices
+
+  booking-service:
+    build:
+      context: .
+      dockerfile: src/Services/BookingService/BookingService_API/Dockerfile
+    container_name: booking-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: 8082
+      ConnectionStrings__DefaultConnection: "Server=booktime_booking-db;Port=5432;Database=booking_service;Username=admin;Password=booktime123;SSLMode=Disable;"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__User: guest
+      RabbitMq__Pass: guest
+    ports:
+      - "5053:8082"
+    depends_on:
+      booktime_booking-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+      resource-service:
+        condition: service_started
+    networks:
+      - microservices
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: src/Gateways/ApiGateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      ASPNETCORE_HTTP_PORTS: 8080
+    ports:
+      - "5159:8080"
+    depends_on:
+      - auth-service
+      - user-service
+      - resource-service
+      - booking-service
+    networks:
+      - microservices
 
 volumes:
   pgdata_bookingservice:

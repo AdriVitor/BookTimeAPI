@@ -1,0 +1,127 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/v1/login",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "auth-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/login",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Users/Exists",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/users/exists",
+      "UpstreamHttpMethod": [ "POST" ],
+      "Priority": 2
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Users",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/users",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Users/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/users/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Roles",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/roles",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Roles/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/roles/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/UserRoles",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/userroles",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/UserRoles/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "user-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/userroles/{everything}",
+      "UpstreamHttpMethod": [ "GET", "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/resource",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "resource-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/resource",
+      "UpstreamHttpMethod": [ "GET", "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/resource/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "resource-service", "Port": 8080 } ],
+      "UpstreamPathTemplate": "/api/v1/resource/{everything}",
+      "UpstreamHttpMethod": [ "GET", "PUT", "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Reservation",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "booking-service", "Port": 8082 } ],
+      "UpstreamPathTemplate": "/api/v1/reservation",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Reservation/Update",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "booking-service", "Port": 8082 } ],
+      "UpstreamPathTemplate": "/api/v1/reservation/update",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "Priority": 2,
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/api/v1/Reservation/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "booking-service", "Port": 8082 } ],
+      "UpstreamPathTemplate": "/api/v1/reservation/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/Resource/{resourceId}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "booking-service", "Port": 8082 } ],
+      "UpstreamPathTemplate": "/api/v1/reservation/resource/{resourceId}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "Priority": 2,
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    },
+    {
+      "DownstreamPathTemplate": "/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [ { "Host": "booking-service", "Port": 8082 } ],
+      "UpstreamPathTemplate": "/api/v1/reservation/{id}",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": { "AuthenticationProviderKeys": [ "Bearer" ] }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://api-gateway:8080"
+  }
+}

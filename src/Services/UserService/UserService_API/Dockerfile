@@ -10,8 +10,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["src/Services/UserService/UserService_API/UserService_API.csproj", "src/Services/UserService/UserService_API/"]
-COPY ["src/libs/Communication.Email/Communication.Email.csproj", "src/libs/Communication.Email/"]
-COPY ["src/libs/MessageBus/Communication.MessageBus.csproj", "src/libs/MessageBugLib/"]
+COPY ["src/Libs/Email/Communication.Email.csproj", "src/Libs/Email/"]
+COPY ["src/Libs/MessageBus/Communication.MessageBus.csproj", "src/Libs/MessageBus/"]
 COPY ["src/Services/UserService/UserService_Application/UserService_Application.csproj", "src/Services/UserService/UserService_Application/"]
 COPY ["src/Services/UserService/UserService_Domain/UserService_Domain.csproj", "src/Services/UserService/UserService_Domain/"]
 COPY ["src/Services/UserService/UserService_Infraestructure/UserService_Infraestructure.csproj", "src/Services/UserService/UserService_Infraestructure/"]

@@ -10,14 +10,18 @@ namespace BookingService_API.Extensions
 {
     public static class MessageBrokerExtensions
     {
-        public static IServiceCollection AddConfigurationMessaging(this IServiceCollection services)
+        public static IServiceCollection AddConfigurationMessaging(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<FinishReservationConsumer<UserValidatedConsumerDTO>>();
                 x.AddConsumer<FinishReservationConsumer<ResourceValidatedConsumerDTO>>();
 
-                MessagingDefaults.ConfigureRabbitMq(x, configure: (cfg, context) =>
+                MessagingDefaults.ConfigureRabbitMq(x,
+                    host: configuration["RabbitMq:Host"] ?? "localhost",
+                    user: configuration["RabbitMq:User"] ?? "guest",
+                    pass: configuration["RabbitMq:Pass"] ?? "guest",
+                    configure: (cfg, context) =>
                 {
                     cfg.ReceiveEndpoint("finish-reservation-uservalidated-queue", e =>
                     {

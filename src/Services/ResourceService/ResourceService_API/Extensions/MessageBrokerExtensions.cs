@@ -6,13 +6,17 @@ namespace ResourceService_API.Extensions
 {
     public static class MessageBrokerExtensions
     {
-        public static IServiceCollection AddConfigurationMessageBroker(this IServiceCollection services)
+        public static IServiceCollection AddConfigurationMessageBroker(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddMassTransit(x =>
             {
                 x.AddConsumer<ResourceValidatedConsumer>();
 
-                MessagingDefaults.ConfigureRabbitMq(x, configure: (cfg, context) =>
+                MessagingDefaults.ConfigureRabbitMq(x,
+                    host: configuration["RabbitMq:Host"] ?? "localhost",
+                    user: configuration["RabbitMq:User"] ?? "guest",
+                    pass: configuration["RabbitMq:Pass"] ?? "guest",
+                    configure: (cfg, context) =>
                 {
                     cfg.ReceiveEndpoint("resource-validate-queue", e =>
                     {
