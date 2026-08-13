@@ -6,9 +6,9 @@ BookTime é uma plataforma de reservas (**Booking System**) desenvolvida em **.N
 
 * Microsserviços
 * Domain-Driven Design (DDD)
-* Clean Architecture
 * API Gateway com Ocelot
 * Comunicação assíncrona com RabbitMQ + MassTransit
+* **SAGA Pattern (coreografado)** para consistência entre serviços na criação de reservas: o `BookingService` cria a reserva como `Pending` e publica eventos de validação para `UserService` e `ResourceService`; cada um executa sua transação local e publica o resultado de volta, e o `BookingService` confirma ou compensa a reserva (`Confirmed`/`Failed`) conforme as respostas
 * Banco de dados independente para cada serviço (PostgreSQL 16)
 
 ## 🛠 Tecnologias
@@ -40,6 +40,17 @@ src
     ├── UserService
     ├── BookingService
     ├── ResourceService
+
+tests
+├── Integration
+    ├── AuthService.IntegrationTests
+    ├── UserService.IntegrationTests
+    ├── BookingService.IntegrationTests
+    ├── ResourceService.IntegrationTests
+├── Unit
+    ├── UserService.UnitTests
+    ├── BookingService.UnitTests
+    ├── ResourceService.UnitTests
 ```
 
 Cada microsserviço é organizado em camadas:
